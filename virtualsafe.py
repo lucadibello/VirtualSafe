@@ -1,10 +1,7 @@
 # author: Luca Di Bello
 
 import os
-import random
-import string
 import base64
-import time
 import argparse
 
 from cryptography.hazmat.backends import default_backend
