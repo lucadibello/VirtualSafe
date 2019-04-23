@@ -56,6 +56,22 @@ parser.add_argument(
     help="Decrypt a specific directory using a key saved into a file"
 )
 
+parser.add_argument(
+    '--crypt-filename',
+    default=False,
+    dest="crypt_filename",
+    action="store_true",
+    help="With this flag also the filenames will be encrypted"
+)
+
+parser.add_argument(
+    '--decrypt-filename',
+    default=False,
+    dest="decrypt_filename",
+    action="store_true",
+    help="With this flag also the filenames will be decrypted"
+)
+
 # Parse all passed parameters
 args = parser.parse_args()
 
@@ -81,7 +97,7 @@ def main():
         }
 
         # Crypt the passed directory
-        crypt_directory(crypt["dir"], crypt["key"])
+        crypt_directory(crypt["dir"], crypt["key"], args.crypt_filename)
 
     elif args.decrypt_dir:
         decrypt = {
@@ -90,7 +106,7 @@ def main():
         }
 
         # Crypt the passed directory
-        decrypt_directory(decrypt["dir"], decrypt["key"])
+        decrypt_directory(decrypt["dir"], decrypt["key"], args.decrypt_filename)
 
 
 # List all files of a folder
@@ -115,7 +131,10 @@ def get_file_data(filePath):
 # Generate a random key in text format
 def generate_key(password, key_length, salt=os.urandom(16)):
     password = password.encode("utf-8")  # Convert to type bytes
-    salt = salt.encode("utf-8")
+
+    # If string, encode it do a byte array
+    if type(salt) == str:
+        salt = salt.encode("utf-8")
 
     kdf = PBKDF2HMAC(
         algorithm=hashes.SHA256(),
@@ -147,31 +166,53 @@ def decrypt_data(crypted_data, key_file_path):
     return cipher_suite.decrypt(crypted_data)
 
 
-def crypt_file(file, key_path):
+def crypt_file(file, key_path, crypt_filename = False):
     try:
         data = crypt_data(get_file_data(file), key_path)
 
         with open(file, "wb") as handler:
             handler.write(data)
 
+        if crypt_filename:
+            base_directory = os.path.split(file)[0]
+
+            new_filename = crypt_data(
+                os.path.basename(file).encode("utf-8"),
+                key_path
+            ).decode("utf-8")
+
+            # Renames file
+            os.rename(file, os.path.join(base_directory, new_filename))
         return True
 
-    except:
+    except PermissionError as a:
+        print(a)
         return False
 
 
-def decrypt_file(file, key_path):
+def decrypt_file(file, key_path, decrypt_filename = False):
     try:
         data = decrypt_data(get_file_data(file), key_path)
 
         with open(file, "wb") as handler:
             handler.write(data)
+
+        if decrypt_filename:
+            base_directory = os.path.split(file)[0]
+
+            new_filename = decrypt_data(
+                os.path.basename(file).encode("utf-8"),
+                key_path
+            ).decode("utf-8")
+
+            # Renames file
+            os.rename(file, os.path.join(base_directory, new_filename))
         return True
     except:
         return False
 
 
-def crypt_directory(dir_path, key_path):
+def crypt_directory(dir_path, key_path, crypt_filenames=False):
     files = get_files(dir_path)
     failed_files = []
 
@@ -179,7 +220,7 @@ def crypt_directory(dir_path, key_path):
 
     for file in files:
         # Crypt file using key
-        status = crypt_file(file, key_path)
+        status = crypt_file(file, key_path, crypt_filenames)
 
         if not status:
             failed_files.append(file)
@@ -197,7 +238,7 @@ def crypt_directory(dir_path, key_path):
         print(i+1, ") {}".format(failed_files[i]))
 
 
-def decrypt_directory(dir_path, key_path):
+def decrypt_directory(dir_path, key_path, crypt_filenames=False):
     files = get_files(dir_path)
     failed_files = []
 
@@ -205,7 +246,7 @@ def decrypt_directory(dir_path, key_path):
 
     for file in files:
         # Crypt file using key
-        status = decrypt_file(file, key_path)
+        status = decrypt_file(file, key_path, crypt_filenames)
 
         if not status:
             failed_files.append(file)
