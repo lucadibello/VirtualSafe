@@ -1,4 +1,4 @@
-# Project Title
+# VirtualSafe
 
 With this program you can easily protect your files using a 32 character length generated key to encode and decode them. This program can also encrypt and decrypt filenames.
 
