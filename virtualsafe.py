@@ -30,7 +30,6 @@ parser.add_argument(
     metavar=("<PASSWORD>","<KEY>"),
     nargs=2,
     type=str,
-    required="--generate-key",
     help="Used for specify the password and the salt strings used for the secure string generation"
 )
 
@@ -85,8 +84,13 @@ def main():
         export_key(args.generate_key_dest, key)
 
         print("Key saved in", os.path.abspath(args.generate_key_dest),"!")
-    else:
-        print("You have to: --generate-key <path> and --security-credentials <PASSWORD> <KEY>.")
+    elif (not args.generate_key_dest and args.credentials) or (args.generate_key_dest and not args.credentials):
+        print("You have to: --generate-key <path> --security-credentials <PASSWORD> <KEY>.")
+        print()
+        print("[Example of key generation]")
+        print("python virtualsafe.py --generate-key 'C:\\Users\\luca6\\Desktop\\super-secure-key.txt' --security-credentials 'password' 'salt'")
+        print()
+        parser.print_help()
 
     if args.crypt_dir:
         crypt = {
@@ -230,10 +234,12 @@ def crypt_directory(dir_path, key_path, crypt_filenames=False):
     print("[Encrypt status]")
     print("Total encrypted: {}/{}".format(tot_files-len(failed_files), tot_files))
     print()
-    print("[Failed files]")
-
-    for i in range(0, len(failed_files)):
-        print(i+1, ") {}".format(failed_files[i]))
+    
+    if len(failed_files) > 0:
+        print("[Failed files]")
+        for i in range(0, len(failed_files)):
+            print(i+1, ") {}".format(failed_files[i]))
+        print()
 
 
 def decrypt_directory(dir_path, key_path, crypt_filenames=False):
@@ -256,10 +262,11 @@ def decrypt_directory(dir_path, key_path, crypt_filenames=False):
     print("[Decrypt status]")
     print("Total decrypted: {}/{}".format(tot_files-len(failed_files), tot_files))
     print()
-    print("[Failed files]")
 
-    for i in range(0, len(failed_files)):
-        print(i+1, ") {}".format(failed_files[i]))
-
+    if len(failed_files) > 0:
+        print("[Failed files]")
+        for i in range(0, len(failed_files)):
+            print(i+1, ") {}".format(failed_files[i]))
+        print()
 
 main()
