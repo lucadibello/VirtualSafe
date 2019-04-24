@@ -10,7 +10,7 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.fernet import Fernet, InvalidToken
 
 parser = argparse.ArgumentParser(
-    description="This program let the user crypt/decrypt a folder using a generated 32 character long key.",
+    description="With this program you can easily protect your files using a 32 character length generated key to encode and decode them. This program can also encrypt and decrypt filenames.",
     epilog="Program created by Luca Di Bello"
 )
 
@@ -20,17 +20,18 @@ parser.add_argument(
     dest="generate_key_dest",
     metavar='<PATH>',
     type=str,
-    help="Generates a new key using"
+    help="Generates a new key in the passed path, it requires '--security-credentials' to generate correctly the key"
 )
 
 parser.add_argument(
-    '--security-credentials','-credentials',
+    '--security-credentials',
     default=False,
     dest="credentials",
     metavar=("<PASSWORD>","<KEY>"),
     nargs=2,
     type=str,
-    help="Password and Salt strings used for generating a secure key"
+    required="--generate-key",
+    help="Used for specify the password and the salt strings used for the secure string generation"
 )
 
 parser.add_argument(
@@ -40,7 +41,7 @@ parser.add_argument(
     metavar=('<PATH_DIRECTORY>','<PATH_KEY>'),
     nargs=2,
     type=str,
-    help="Crypt a specific directory using a key saved into a file"
+    help="Used for crypt a specific directory using a key saved into a file"
 )
 
 parser.add_argument(
@@ -50,7 +51,7 @@ parser.add_argument(
     metavar=('<PATH_DIRECTORY>','<PATH_KEY>'),
     nargs=2,
     type=str,
-    help="Decrypt a specific directory using a key saved into a file"
+    help="Used for decrypt a specific directory using a key saved into a file"
 )
 
 parser.add_argument(
@@ -58,7 +59,7 @@ parser.add_argument(
     default=False,
     dest="crypt_filename",
     action="store_true",
-    help="With this flag also the filenames will be encrypted"
+    help="Used for encrypt also the filenames during the crypt process"
 )
 
 parser.add_argument(
@@ -66,7 +67,7 @@ parser.add_argument(
     default=False,
     dest="decrypt_filename",
     action="store_true",
-    help="With this flag also the filenames will be decrypted"
+    help="Used for decrypt also the filenames during the decrypt process"
 )
 
 # Parse all passed parameters
