@@ -2,6 +2,14 @@
 
 With this program you can easily protect your files using a 32 character length generated key to encode and decode them. This program can also encrypt and decrypt filenames.
 
+## Setup
+
+For an easy setup you can use `setup.py` file in this way:
+
+``` shell
+python .\setup.py install
+```
+
 ## Getting Started
 
 This programs let the user generate a 32 character length string, used later for encrypt and decrypt file(s). The user can generate the password using "--generate-key <key_path> --security-credentials <key_password> <key_salt>" options.
@@ -19,14 +27,3 @@ python virtualsafe.py --crypt-dir "C:\Users\luca6\Desktop\private" "C:\Users\luc
 ``` 
 
 The command for decrypt the encrypted directory has the same structure, it just uses another option name: "--decrypt-dir <directory_path> <key_path>"
-
-## Getting Started
-FINISH THIS TOMORROW :)
-
-### Setup
-
-For an easy setup you can use `setup.py` file in this way:
-
-``` shell
-python .\setup.py install
-```
