@@ -1,4 +1,4 @@
-![][py3x]
+[![Python 3.*](https://img.shields.io/badge/Python-3.*-green.svg)](https://shields.io/)
 
 # VirtualSafe
 
