@@ -9,7 +9,7 @@ This program requires `python3`. It can be downloaded through the [download page
 For an easy setup you can run `setup.py` file:
 
 ``` shell
-python .\setup.py install
+python setup.py install
 ```
 
 ## Getting Started
@@ -74,3 +74,10 @@ Command example:
 ``` shell
 python virtualsafe.py --decrypt-dir "C:\Users\luca6\Desktop\super_secret_directory" "C:\Users\luca6\Desktop\super-secure-key.txt" --decrypt-filename
 ``` 
+
+## Screenshots
+Before full encrypt (data encrypt and file name encrypt):
+![Before full crypt](assets/before_full_crypt.png)
+
+After full encrypt (data encrypt and file name encrypt):
+![Before full crypt](assets/after_full_crypt.png)
