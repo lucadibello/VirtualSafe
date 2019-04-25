@@ -9,7 +9,7 @@ Before full encrypt (data encrypt and file name encrypt):
 After full encrypt (data encrypt and file name encrypt):
 ![Before full crypt](assets/after_full_crypt.png)
 
-## <SEARCH_FOR_A_BETTER_TITLE>
+## Prerequisites
 This program requires `python3`. It can be downloaded through the [download page]("https://www.python.org/downloads") on the official python website.
 
 ## Setup
